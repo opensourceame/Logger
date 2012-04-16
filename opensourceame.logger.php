@@ -7,7 +7,7 @@
  * @subpackage		logger
  * @author			David Kelly
  * @copyright		David Kelly, 2009 (http://opensourceame.com)
- * @version			3.1
+ * @version			3.2
  */
 
 namespace opensourceame;
@@ -23,7 +23,7 @@ if (! defined('STDOUT'))
  */
 class logger
 {
-	const		version					= '3.1.7';
+	const		version					= '3.2';
 	const		modeRealTime			= 1;
 	const		modeBuffered			= 2;
 	const		logLevelFatal			= 1;
@@ -260,13 +260,30 @@ class logger
 
 class loggerPlugin
 {
-	private 	$_parent		= null;
-	private		$buffer			= null;
-	public		$logMode		= logger::modeRealTime;
-	public		$logFile		= null;
-	public		$logFileHandle	= STDOUT;
-	public		$level			= 10;
-	public		$dateFormat		= 'Y-m-d H:i:s';
+	private 	$_parent			= null;
+	private		$buffer				= null;
+	public		$logMode			= logger::modeRealTime;
+	public		$logFile			= null;
+	public		$logFileHandle		= STDOUT;
+	public		$level				= 10;
+	public		$useLabels			= false;
+	public		$dateFormat			= 'Y-m-d H:i:s';
+	
+	public		$labels				= array(
+		0		=> 'disaster',
+		1		=> 'fatal',
+		2		=> 'warning',
+		3		=> 'debug',
+		4		=> 'trace',		
+	);
+	
+	protected function getLabel($level)
+	{
+		if (! isset($this->labels[$level]))
+			return 'unknown';
+			
+		return $this->labels[$level];
+	}
 	
 	/**
 	 * Instantiate the plugin and link back to the parent
@@ -276,6 +293,20 @@ class loggerPlugin
 	public function __construct(logger $parentObject)
 	{
 		$this->_parent = $parentObject;
+		
+		$longest = 0;
+		
+		foreach ($this->labels as $label)
+		{
+			$longest = max($longest, strlen($label));
+		}
+		
+		$longest ++;
+		
+		foreach ($this->labels as $key => $label)
+		{
+			$this->labels[$key] = $label . str_repeat(' ', $longest - (strlen($label)));
+		}
 		
 		return true;
 	}
@@ -474,12 +505,18 @@ class loggerPlugin_SysLog extends loggerPlugin
 	
 	public function formatLine($level, $message)
 	{
+		
 		// append a prefix to negative level messages
 		if ($level < 0)
 		{
 			$message = '!! ' . $message;
 		} else {
-			$message = str_repeat($this->indentText, $level) . $message;
+			$message = str_repeat($this->indentText, (int) $level) . $message;
+		}
+
+		if ($this->useLabels)
+		{
+			$message = $this->getLabel($level) . ' ' . $message;
 		}
 		
 		return $message;
