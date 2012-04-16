@@ -270,7 +270,7 @@ class loggerPlugin
 	public		$dateFormat			= 'Y-m-d H:i:s';
 	
 	public		$labels				= array(
-		0		=> 'disaster',
+		0		=> '',
 		1		=> 'fatal',
 		2		=> 'warning',
 		3		=> 'debug',
