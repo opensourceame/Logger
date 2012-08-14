@@ -23,7 +23,7 @@ if (! defined('STDOUT'))
  */
 class logger
 {
-	const		version					= '3.5.0';
+	const		version					= '3.5.1';
 	const		modeRealTime			= 1;
 	const		modeBuffered			= 2;
 	const		logLevelFatal			= 1;
@@ -43,6 +43,7 @@ class logger
 	protected 	$logFileHandle			= STDOUT;
 	protected	$logMode				= self::modeRealTime;
 	protected	$logStartStop			= true;
+
 	protected	$level					= 5;
 	protected	$pluginReady			= false;
 	protected	$config					= array(
@@ -293,6 +294,7 @@ class loggerPlugin
 	public		$logFile			= null;
 	public		$logFileHandle		= STDOUT;
 	public		$logStartStop		= true;
+	public      $logPID             = false;
 	public		$level				= 10;
 	public		$useLabels			= false;
 	public		$dateFormat			= 'Y-m-d H:i:s';
@@ -514,6 +516,11 @@ class loggerPlugin_Text extends loggerPlugin
 
 		$m  = $this->getDate() . ' ';
 		$m .= $this->prefix . ' ';
+
+		if ($this->logPID)
+		{
+		    $m .= sprintf('[%7s]', getmypid());
+		}
 
 		if ($this->showElapsedTime)
 		{
