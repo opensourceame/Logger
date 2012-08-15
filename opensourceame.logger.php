@@ -519,7 +519,7 @@ class loggerPlugin_Text extends loggerPlugin
 
 		if ($this->logPID)
 		{
-		    $m .= sprintf('[%7s]', getmypid());
+		    $m .= sprintf('[%7s] ', getmypid());
 		}
 
 		if ($this->showElapsedTime)
