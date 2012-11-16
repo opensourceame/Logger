@@ -49,7 +49,6 @@ class Plugin
 	 */
   	public function __construct(\opensourceame\Logger $parentObject)
   	{
-		var_dump("DFJKLFDJFKLD");
 		$this->parent = $parentObject;
 
 		$longest = 0;
