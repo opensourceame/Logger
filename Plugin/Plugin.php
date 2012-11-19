@@ -22,10 +22,11 @@ class Plugin
 	public		$labels				= array(
 			0		=> 'init',
 			1		=> 'fatal',
-			2		=> 'warning',
-			3		=> 'info',
-			4		=> 'debug',
-			5		=> 'trace',
+			2		=> 'error',
+			3		=> 'warning',
+			4		=> 'info',
+			5		=> 'debug',
+			6		=> 'trace',
 	);
 
 	/**
@@ -122,6 +123,8 @@ class Plugin
 
 	/**
 	 * Fatal defaults to level 1
+	 *
+	 * @param string $message
 	 */
 	public function fatal($message)
 	{
@@ -129,35 +132,53 @@ class Plugin
 	}
 
 	/**
-	 * Warning defaults to level 2
+	 * Error defaults to level 2
+	 *
+	 * @param string $message
 	 */
-	public function warning($message)
+	public function error($message)
 	{
 		return $this->parent()->log(2, $message);
 	}
 
 	/**
-	 *  Info defaults to level 3
+	 * Warning defaults to level 3
+	 *
+	 * @param string $message
 	 */
-	public function info($message)
+	public function warning($message)
 	{
 		return $this->parent()->log(3, $message);
 	}
 
 	/**
-	 * Debug defaults to level 4
+	 *  Info defaults to level 4
+	 *
+	 *  @param string $message
 	 */
-	public function debug($message)
+	public function info($message)
 	{
 		return $this->parent()->log(4, $message);
 	}
 
 	/**
-	 * Trace defaults to level 5
+	 * Debug defaults to level 5
+	 *
+	 * @param string $message
+	 */
+	public function debug($message)
+	{
+		return $this->parent()->log(5, $message);
+	}
+
+	/**
+	 * Trace defaults to level 6
+	 *
+	 * @param string $message
 	 */
 	public function trace($message)
 	{
-		return $this->parent()->log(5, $message);
+		return $this->parent()->log(6, $message);
 	}
 
 	/**
@@ -185,6 +206,8 @@ class Plugin
 	}
 
 	/**
+	 * Get the contents of the buffer
+	 *
 	 * @return 			string contents of the buffer
 	 */
 	protected function getBuffer()
@@ -210,6 +233,11 @@ class Plugin
 		return date($this->dateFormat);
 	}
 
+	/**
+	 * Get the time elapsed since the last message was logged
+	 *
+	 * @return string time in the format specified by the elapsedTimeFormat property
+	 */
 	public function getElapsedTime()
 	{
 		$now 		= microtime(true);
