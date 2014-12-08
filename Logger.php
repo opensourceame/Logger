@@ -7,7 +7,7 @@
  * @subpackage		logger
  * @author			David Kelly
  * @copyright		David Kelly, 2009 (http://opensourceame.com)
- * @version			3.4
+ * @version			3.4 
  */
 
 namespace opensourceame;
